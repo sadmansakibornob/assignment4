@@ -60,9 +60,10 @@ function process(data) {
 function more(index) {
   var country = allCountries[index];
   var capital = country.capital ? country.capital[0] : "N/A";
+  var apiKey = "f03d78dc7ca64810bdd85508240312";
 
   fetch(
-    `http://api.weatherapi.com/v1/current.json?key=f03d78dc7ca64810bdd85508240312&q=${encodeURIComponent(
+    `http://api.weatherapi.com/v1/current.json?key=${apiKey}&q=${encodeURIComponent(
       capital
     )}&aqi=yes`
   )
