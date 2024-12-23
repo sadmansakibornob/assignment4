@@ -1,6 +1,7 @@
 var allCountries = [];
 
 function connect(event) {
+  event.preventDefault();
   var searchInput = document.getElementById("search-input").value;
   document.getElementById("search-input").value = "";
 
@@ -31,9 +32,7 @@ function process(data) {
             <div class="card">
                 <img src="${
                   country.flags.svg
-                }" class="card-img-top picture" alt="Flag of ${
-      country.name.common
-    }">
+                }" class="card-img-top" alt="Flag of ${country.name.common}">
                 <div class="card-body">
                     <h5 class="card-title">${country.name.common}</h5>
                     <p class="card-text"><strong>Capital:</strong> ${
