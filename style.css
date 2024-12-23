@@ -1,0 +1,61 @@
+/* Google Fonts */
+@import url("https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
+
+/* Custom Font for Logo */
+@font-face {
+  font-family: "Sonder";
+  src: url("/assets/font/Regular/SonderRegular.otf") format("opentype");
+}
+
+.logo {
+  font-family: "Sonder";
+}
+
+body {
+  font-family: "Poppins", sans-serif;
+  margin: 0;
+  padding: 0;
+  height: 120vh;
+}
+
+.card {
+  width: 100%;
+  height: 25rem;
+}
+
+.card-img-top {
+  height: 10rem;
+  object-fit: cover;
+}
+
+.card-body {
+  padding: 1rem;
+}
+
+.navbar {
+  background-color: #f8f9fa;
+}
+
+.search-bar {
+  background-color: #f4f4f4;
+}
+
+.country {
+  margin-bottom: 20px;
+}
+
+#content {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.search-bar {
+  position: relative;
+  background-image: url("assets/image/nature-3133508_1280.jpg");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-blend-mode: multiply;
+  object-fit: scale-down;
+}
