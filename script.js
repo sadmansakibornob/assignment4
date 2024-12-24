@@ -1,116 +1,116 @@
-var allCountries = [];
+// JavaScript for fetching country and displaying data in cards
 
-function connect(event) {
-  event.preventDefault();
-  var searchInput = document.getElementById("search-input").value;
+function connect() {
+  var searchTerm = document.getElementById("search-input").value;
   document.getElementById("search-input").value = "";
 
-  var url = `https://restcountries.com/v3.1/name/${encodeURIComponent(
-    searchInput
-  )}`;
+  var url = `https://restcountries.com/v3.1/name/${searchTerm}`;
 
   fetch(url)
     .then((res) => res.json())
-    .then((data) => {
-      allCountries = data;
-      process(data);
-    })
-    .catch((error) => {
-      console.error("Error fetching data:", error);
-      alert("Failed to fetch data. Please try again.");
-    });
+    .then((data) => process(data))
+    .catch((error) => console.error("Error fetching country data:", error));
 }
 
 function process(data) {
-  var countryContent = document.getElementById("content");
-  countryContent.textContent = "";
+  var allCountries = data;
+  console.log(allCountries);
+  var oldContent = document.getElementById("content");
 
-  for (var i = 0; i < data.length; i++) {
-    var country = data[i];
-    var countryDiv = document.createElement("div");
-    countryDiv.innerHTML = `
-            <div class="card">
-                <img src="${
-                  country.flags.svg
-                }" class="card-img-top" alt="Flag of ${country.name.common}">
-                <div class="card-body">
-                    <h5 class="card-title">${country.name.common}</h5>
-                    <p class="card-text"><strong>Capital:</strong> ${
-                      country.capital ? country.capital[0] : "N/A"
-                    }</p>
-                    <p class="card-text"><strong>Region:</strong> ${
-                      country.region
-                    }</p>
-                    <p class="card-text"><strong>Population:</strong> ${country.population.toLocaleString()}</p>
-                    <p class="card-text"><strong>Languages:</strong> ${
-                      country.languages
-                        ? Object.values(country.languages).join(", ")
-                        : "N/A"
-                    }</p>
-                    <a href="#" class="btn btn-primary" onclick="more(${i})">More Details</a>
-                </div>
-            </div>
-        `;
-    countryDiv.classList.add("country");
-    countryContent.appendChild(countryDiv);
+  oldContent.textContent = "";
+  for (var i = 1; i <= allCountries.length; i++) {
+    var country = allCountries[i - 1];
+
+    var newDiv = document.createElement("div");
+    newDiv.innerHTML = `
+          <div class="card shadow-sm p-3">
+              <img src="${
+                country.flags.svg
+              }" class="card-img-top" alt="Flag of ${country.name.common}">
+              <div class="card-body">
+                  <h5 class="card-title">${country.name.common}</h5>
+                  <p class="card-text">
+                      <strong>Capital:</strong> ${
+                        country.capital ? country.capital[0] : "N/A"
+                      }<br>
+                      <strong>Region:</strong> ${country.region}<br>
+                      <strong>Population:</strong> ${country.population.toLocaleString()}<br>
+                  </p>
+                  <button class="btn btn-primary" onclick='showDetails(${
+                    i - 1
+                  })'>More Details</button>
+                  <div class="details mt-3" style="display: none;"></div>
+              </div>
+          </div>`;
+
+    newDiv.classList.add("col");
+
+    oldContent.appendChild(newDiv);
   }
 }
 
-function more(index) {
+function showDetails(index) {
+  var allCountries = JSON.parse(sessionStorage.getItem("countries"));
   var country = allCountries[index];
-  var capital = country.capital ? country.capital[0] : "N/A";
-  var apiKey = "f03d78dc7ca64810bdd85508240312";
+  var detailsDiv = event.target.nextElementSibling;
 
-  fetch(
-    `http://api.weatherapi.com/v1/current.json?key=${apiKey}&q=${encodeURIComponent(
-      capital
-    )}&aqi=yes`
-  )
-    .then((res) => res.json())
-    .then((weatherData) => {
-      showDetails(country, weatherData);
-    });
+  if (detailsDiv.style.display === "none") {
+    detailsDiv.style.display = "block";
+    detailsDiv.innerHTML = `
+          <p><strong>Languages:</strong> ${
+            Object.values(country.languages || {}).join(", ") || "N/A"
+          }</p>
+          <p><strong>Independent:</strong> ${
+            country.independent ? "Yes" : "No"
+          }</p>
+          <p><strong>UN Member:</strong> ${country.unMember ? "Yes" : "No"}</p>
+      `;
+  } else {
+    detailsDiv.style.display = "none";
+    detailsDiv.innerHTML = "";
+  }
 }
 
-function showDetails(country, weather) {
-  var countryDiv = document.createElement("div");
-  countryDiv.innerHTML = `
-      <div class="card">
-          <img src="${
-            country.flags.svg
-          }" class="card-img-top picture" alt="Flag of ${country.name.common}">
-          <div class="card-body">
-              <h5 class="card-title">${country.name.common}</h5>
-              <p class="card-text"><strong>Capital:</strong> ${
-                country.capital ? country.capital[0] : "N/A"
-              }</p>
-               <p class="card-text"><strong>Currency:</strong> ${
-                 country.currencies
-                   ? Object.values(country.currencies)
-                       .map((currency) => currency.name)
-                       .join(", ")
-                   : "N/A"
-               }</p>
-              <p class="card-text"><strong>Weather in ${
-                country.capital ? country.capital[0] : "N/A"
-              }:</strong></p>
-              <ul class="list-group list-group-flush">
-                <li class="list-group-item"><strong>Temperature:</strong> ${
-                  weather.current.temp_c
-                }°C</li>
-                <li class="list-group-item"><strong>Condition:</strong> ${
-                  weather.current.condition.text
-                }</li>
-                <li class="list-group-item"><strong>Wind:</strong> ${
-                  weather.current.wind_kph
-                } kph</li>
-                <li class="list-group-item"><strong>Humidity:</strong> ${
-                  weather.current.humidity
-                }%</li>
-              </ul>
-          </div>
-      </div>
-    `;
-  document.getElementById("content").innerHTML = "";
-  document.getElementById("content").appendChild(countryDiv);
+// Save country data to session storage
+function saveCountries(data) {
+  sessionStorage.setItem("countries", JSON.stringify(data));
+}
+
+// Update process to save data
+function process(data) {
+  saveCountries(data);
+  var allCountries = data;
+  console.log(allCountries);
+  var oldContent = document.getElementById("content");
+
+  oldContent.textContent = "";
+  for (var i = 1; i <= allCountries.length; i++) {
+    var country = allCountries[i - 1];
+
+    var newDiv = document.createElement("div");
+    newDiv.innerHTML = `
+          <div class="card shadow-sm p-3">
+              <img src="${
+                country.flags.svg
+              }" class="card-img-top" alt="Flag of ${country.name.common}">
+              <div class="card-body">
+                  <h5 class="card-title">${country.name.common}</h5>
+                  <p class="card-text">
+                      <strong>Capital:</strong> ${
+                        country.capital ? country.capital[0] : "N/A"
+                      }<br>
+                      <strong>Region:</strong> ${country.region}<br>
+                      <strong>Population:</strong> ${country.population.toLocaleString()}<br>
+                  </p>
+                  <button class="btn btn-primary" onclick='showDetails(${
+                    i - 1
+                  })'>More Details</button>
+                  <div class="details mt-3" style="display: none;"></div>
+              </div>
+          </div>`;
+
+    newDiv.classList.add("col");
+
+    oldContent.appendChild(newDiv);
+  }
 }

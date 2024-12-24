@@ -18,9 +18,19 @@ body {
   height: 120vh;
 }
 
+#content {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 20px;
+}
+
 .card {
-  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
   height: 25rem;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 .card-img-top {
@@ -28,8 +38,24 @@ body {
   object-fit: cover;
 }
 
+.card-title {
+  white-space: nowrap; /* Prevents text from wrapping */
+  overflow: hidden; /* Ensures long text does not overflow the container */
+  text-overflow: ellipsis; /* Adds an ellipsis (...) if text is too long */
+  font-size: 1.25rem;
+  font-weight: bold;
+}
+
 .card-body {
+  flex-grow: 1;
   padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.details {
+  margin-top: 1rem;
 }
 
 .navbar {
