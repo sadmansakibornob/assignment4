@@ -1,5 +1,3 @@
-// JavaScript for fetching country and displaying data in cards
-
 function connect() {
   var searchTerm = document.getElementById("search-input").value;
   document.getElementById("search-input").value = "";
